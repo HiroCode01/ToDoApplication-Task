@@ -13,12 +13,12 @@ struct EmptyView: View {
         VStack(spacing: 20) {
             Image(systemName: "checklist")
                 .font(.system(size: 64))
-                .foregroundColor(.gray.opacity(0.5))
+                .foregroundColor(.blue.opacity(0.5))
             
             VStack(spacing: 10) {
                 Text("No tasks yet")
                     .font(.title2)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.blue.opacity(0.5))
                 
                 Text("Tap + to add your first task")
                     .font(.subheadline)

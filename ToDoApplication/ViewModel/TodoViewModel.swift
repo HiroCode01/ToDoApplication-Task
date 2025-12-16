@@ -11,6 +11,7 @@ import Combine
 
 class TodoViewModel: ObservableObject {
     @Published var task: [Task] = []
+    @Published var isShowingSheet = false
     
     private let userDefaultsKey = "SavedTasks"
     

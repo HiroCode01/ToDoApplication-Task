@@ -26,14 +26,20 @@ struct TaskListView: View {
                 .toolbar {
                     ToolbarItem(placement: .bottomBar) {
                         Button {
-                            viewModel.addTask("test!")
+                            viewModel.isShowingSheet = true
                         } label: {
                             Image(systemName: "plus")
                                 .font(.title)
                                 .padding()
-                                .foregroundStyle(Color(.blue))
+                                .foregroundStyle(.tint)
                         }
                     }
+                }
+                .sheet(isPresented: $viewModel.isShowingSheet) {
+                    NavigationStack {
+                        AddTaskView(onConfirm: viewModel.addTask)
+                    }
+                    .presentationDetents([.medium])
                 }
             }
             
