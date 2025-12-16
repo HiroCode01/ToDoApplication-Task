@@ -14,15 +14,31 @@ struct TaskListView: View {
     var body: some View {
         ZStack {
             NavigationStack {
-                if viewModel.task.isEmpty {
-                    VStack {
-                        EmptyView()
+                List {
+                    ForEach(viewModel.task) { task in
+                        HStack {
+                            Text(task.title)
+                        }
                     }
-                } else {
-                    List(viewModel.task) { task in
-                        Text(task.title)
+                    .onDelete(perform: viewModel.deleteTask)
+                }
+                .navigationTitle("Tasks")
+                .toolbar {
+                    ToolbarItem(placement: .bottomBar) {
+                        Button {
+                            viewModel.addTask("test!")
+                        } label: {
+                            Image(systemName: "plus")
+                                .font(.title)
+                                .padding()
+                                .foregroundStyle(Color(.blue))
+                        }
                     }
                 }
+            }
+            
+            if viewModel.task.isEmpty {
+                EmptyView()
             }
         }
     }
