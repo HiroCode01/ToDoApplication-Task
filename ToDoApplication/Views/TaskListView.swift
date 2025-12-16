@@ -16,13 +16,15 @@ struct TaskListView: View {
             NavigationStack {
                 List {
                     ForEach(viewModel.task) { task in
-                        HStack {
-                            Text(task.title)
-                        }
+                        TaskRowView(task: task, onToggle: viewModel.toggleTaskCompletion)
                     }
                     .onDelete(perform: viewModel.deleteTask)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(.vertical, 5)
                 }
                 .navigationTitle("Tasks")
+                .listStyle(.plain)
                 .toolbar {
                     ToolbarItem(placement: .bottomBar) {
                         Button {

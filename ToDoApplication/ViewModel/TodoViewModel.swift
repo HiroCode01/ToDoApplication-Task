@@ -14,18 +14,29 @@ class TodoViewModel: ObservableObject {
     @Published var isShowingSheet = false
     
     private let userDefaultsKey = "SavedTasks"
+    private let generator = UINotificationFeedbackGenerator()
     
     init() { loadData() }
     
     func addTask(_ title: String) {
         let newTask = Task(title: title)
         task.append(newTask)
+        generator.notificationOccurred(.success)
         saveData()
     }
     
     func deleteTask(at offset: IndexSet) {
         task.remove(atOffsets: offset)
+        generator.notificationOccurred(.success)
         saveData()
+    }
+    
+    func toggleTaskCompletion(_ selectedTask: Task) {
+        if let index = task.firstIndex(where: { $0.id == selectedTask.id }) {
+            task[index].isCompleted.toggle()
+            generator.notificationOccurred(.success)
+            saveData()
+        }
     }
     
     private func saveData() {
