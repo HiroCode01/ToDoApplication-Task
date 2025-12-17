@@ -13,11 +13,18 @@ class TodoViewModel: ObservableObject {
     @Published var tasks: [Task] = []
     @Published var isShowingSheet = false
     @Published var filter: TaskFilter = .all
+    @Published var searchText: String = ""
     
     private let userDefaultsKey = "SavedTasks"
     private let generator = UINotificationFeedbackGenerator()
     
     init() { loadData() }
+    
+    var visibleTasks: [Task] {
+        filteredTasks.filter {
+            searchText.isEmpty || $0.title.localizedCaseInsensitiveContains(searchText)
+        }
+    }
     
     var filteredTasks: [Task] {
         switch filter {
