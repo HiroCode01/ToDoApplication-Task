@@ -12,11 +12,23 @@ import Combine
 class TodoViewModel: ObservableObject {
     @Published var tasks: [Task] = []
     @Published var isShowingSheet = false
+    @Published var filter: TaskFilter = .all
     
     private let userDefaultsKey = "SavedTasks"
     private let generator = UINotificationFeedbackGenerator()
     
     init() { loadData() }
+    
+    var filteredTasks: [Task] {
+        switch filter {
+        case .all:
+            return tasks
+        case .completed:
+            return tasks.filter { $0.isCompleted }
+        case .active:
+            return tasks.filter { !$0.isCompleted }
+        }
+    }
     
     func addTask(_ title: String) {
         let newTask = Task(title: title)
@@ -33,7 +45,9 @@ class TodoViewModel: ObservableObject {
     
     func toggleTaskCompletion(_ selectedTask: Task) {
         if let index = tasks.firstIndex(where: { $0.id == selectedTask.id }) {
-            tasks[index].isCompleted.toggle()
+            withAnimation(.easeInOut) {
+                tasks[index].isCompleted.toggle()
+            }
             generator.notificationOccurred(.success)
             saveData()
         }

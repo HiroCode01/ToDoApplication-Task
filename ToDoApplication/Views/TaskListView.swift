@@ -14,11 +14,11 @@ struct TaskListView: View {
     var body: some View {
             NavigationStack {
                 Group {
-                    if viewModel.tasks.isEmpty {
+                    if viewModel.filteredTasks.isEmpty {
                         ContentUnavailableView("No tasks yet", systemImage: "checklist", description: Text("Tap + to add your first task"))
                     } else {
                         List {
-                            ForEach(viewModel.tasks) { task in
+                            ForEach(viewModel.filteredTasks) { task in
                                 TaskRowView(tasks: task, onToggle: viewModel.toggleTaskCompletion)
                             }
                             .onDelete(perform: viewModel.deleteTask)
@@ -39,6 +39,17 @@ struct TaskListView: View {
                                 .font(.title)
                                 .padding()
                                 .foregroundStyle(.main)
+                        }
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Menu {
+                            Picker("Filter", selection: $viewModel.filter) {
+                                ForEach(TaskFilter.allCases) { filter in
+                                    Text(filter.rawValue).tag(filter)
+                                }
+                            }
+                        } label: {
+                            Label("Filter", systemImage: "line.3.horizontal.decrease")
                         }
                     }
                 }
