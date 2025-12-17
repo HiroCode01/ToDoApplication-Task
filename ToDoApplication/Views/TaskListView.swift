@@ -33,7 +33,7 @@ struct TaskListView: View {
                             Image(systemName: "plus")
                                 .font(.title)
                                 .padding()
-                                .foregroundStyle(.tint)
+                                .foregroundStyle(.main)
                         }
                     }
                 }

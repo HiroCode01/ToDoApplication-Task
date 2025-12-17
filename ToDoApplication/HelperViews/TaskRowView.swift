@@ -19,7 +19,7 @@ struct TaskRowView: View {
             } label: {
                 Image(systemName:task.isCompleted ? "checkmark.circle.fill" : "circle")
                     .font(.title2)
-                    .foregroundStyle(.tint)
+                    .foregroundStyle(.main)
             }
             .contentTransition(.symbolEffect)
             .buttonStyle(.plain)
@@ -34,9 +34,8 @@ struct TaskRowView: View {
             Spacer()
         }
         .padding()
-        .frame(maxWidth: .infinity)
-        .background(task.isCompleted ? .gray.opacity(0.2) : .accentColor.opacity(0.2))
-        .clipShape(.rect(cornerRadius: 10))
+        .background(task.isCompleted ? .gray.opacity(0.2) : .main.opacity(0.2))
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 }
 
