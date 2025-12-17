@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 
 class TodoViewModel: ObservableObject {
-    @Published var task: [Task] = []
+    @Published var tasks: [Task] = []
     @Published var isShowingSheet = false
     
     private let userDefaultsKey = "SavedTasks"
@@ -20,20 +20,20 @@ class TodoViewModel: ObservableObject {
     
     func addTask(_ title: String) {
         let newTask = Task(title: title)
-        task.append(newTask)
+        tasks.append(newTask)
         generator.notificationOccurred(.success)
         saveData()
     }
     
     func deleteTask(at offset: IndexSet) {
-        task.remove(atOffsets: offset)
+        tasks.remove(atOffsets: offset)
         generator.notificationOccurred(.success)
         saveData()
     }
     
     func toggleTaskCompletion(_ selectedTask: Task) {
-        if let index = task.firstIndex(where: { $0.id == selectedTask.id }) {
-            task[index].isCompleted.toggle()
+        if let index = tasks.firstIndex(where: { $0.id == selectedTask.id }) {
+            tasks[index].isCompleted.toggle()
             generator.notificationOccurred(.success)
             saveData()
         }
@@ -41,7 +41,7 @@ class TodoViewModel: ObservableObject {
     
     private func saveData() {
         let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(task) {
+        if let encoded = try? encoder.encode(tasks) {
             UserDefaults.standard.set(encoded, forKey: userDefaultsKey)
         }
     }
@@ -50,9 +50,9 @@ class TodoViewModel: ObservableObject {
         let decoder = JSONDecoder()
         if let data = UserDefaults.standard.data(forKey: userDefaultsKey),
            let loadedTasks = try? decoder.decode([Task].self, from: data) {
-            task = loadedTasks
+            tasks = loadedTasks
         } else {
-            task = []
+            tasks = []
         }
     }
 }

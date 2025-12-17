@@ -12,19 +12,24 @@ struct TaskListView: View {
     @StateObject var viewModel = TodoViewModel()
     
     var body: some View {
-        ZStack {
             NavigationStack {
-                List {
-                    ForEach(viewModel.task) { task in
-                        TaskRowView(task: task, onToggle: viewModel.toggleTaskCompletion)
+                Group {
+                    if viewModel.tasks.isEmpty {
+                        ContentUnavailableView("No tasks yet", systemImage: "checklist", description: Text("Tap + to add your first task"))
+                    } else {
+                        List {
+                            ForEach(viewModel.tasks) { task in
+                                TaskRowView(tasks: task, onToggle: viewModel.toggleTaskCompletion)
+                            }
+                            .onDelete(perform: viewModel.deleteTask)
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                            .listRowInsets(.vertical, 5)
+                        }
+                        .listStyle(.plain)
                     }
-                    .onDelete(perform: viewModel.deleteTask)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.vertical, 5)
                 }
                 .navigationTitle("Tasks")
-                .listStyle(.plain)
                 .toolbar {
                     ToolbarItem(placement: .bottomBar) {
                         Button {
@@ -44,11 +49,6 @@ struct TaskListView: View {
                     .presentationDetents([.medium])
                 }
             }
-            
-            if viewModel.task.isEmpty {
-                EmptyView()
-            }
-        }
     }
 }
 
